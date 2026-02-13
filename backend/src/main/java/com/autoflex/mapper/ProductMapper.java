@@ -16,12 +16,15 @@ public class ProductMapper {
     }
 
     public static ProductResponseDTO toResponse(Product product) {
-        ProductResponseDTO dto = new ProductResponseDTO();
-        dto.id = product.id;
-        dto.name = product.name;
-        dto.sku = product.sku;
-        dto.quantity = product.quantity;
-        dto.price = product.price;
-        return dto;
-    }
+    ProductResponseDTO dto = new ProductResponseDTO();
+    dto.id = product.id;
+    dto.name = product.name;
+    dto.sku = product.sku;
+    dto.quantity = product.quantity;
+    dto.price = product.price;
+    dto.createdAt = product.createdAt;
+    dto.updatedAt = product.updatedAt;
+    return dto;
+}
+
 }

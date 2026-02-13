@@ -20,7 +20,17 @@ public class ProductService {
         return product;
     }
 
+    public Product findBySku(String sku) {
+    return repository.find("sku", sku).firstResult();
+}
+
     public List<Product> listAll() {
         return repository.listAll();
+    }
+
+    public List<Product> listPaged(int page, int size) {
+        return repository.findAll()
+                .page(page, size)
+                .list();
     }
 }

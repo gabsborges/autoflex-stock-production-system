@@ -1,14 +1,13 @@
 package com.autoflex.dto;
 
+import com.autoflex.entity.MovementType;
 import java.time.LocalDateTime;
 
-public class ProductResponseDTO {
+public class StockMovementResponseDTO {
 
     public Long id;
-    public String name;
-    public String sku;
+    public MovementType type;
     public Integer quantity;
-    public Double price;
+    public String description;
     public LocalDateTime createdAt;
-    public LocalDateTime updatedAt;
 }

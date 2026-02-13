@@ -1,5 +1,6 @@
 package com.autoflex.controller;
 
+import com.autoflex.dto.ApiResponse;
 import com.autoflex.dto.ProductRequestDTO;
 import com.autoflex.dto.ProductResponseDTO;
 import com.autoflex.entity.Product;
@@ -11,7 +12,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/products")
 @Produces(MediaType.APPLICATION_JSON)
@@ -22,17 +22,40 @@ public class ProductController {
     ProductService service;
 
     @POST
-    public ProductResponseDTO create(@Valid ProductRequestDTO request) {
+    public ApiResponse<ProductResponseDTO> create(@Valid ProductRequestDTO request) {
         Product product = ProductMapper.toEntity(request);
         Product saved = service.create(product);
-        return ProductMapper.toResponse(saved);
+        return new ApiResponse<>(ProductMapper.toResponse(saved));
     }
 
     @GET
-    public List<ProductResponseDTO> list() {
-        return service.listAll()
+    public ApiResponse<List<ProductResponseDTO>> list() {
+        List<ProductResponseDTO> products = service.listAll()
                 .stream()
                 .map(ProductMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new ApiResponse<>(products);
+    }
+
+    @GET
+    @Path("/paged")
+    public ApiResponse<List<ProductResponseDTO>> listPaged(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size) {
+
+        List<ProductResponseDTO> products = service.listPaged(page, size)
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
+
+        return new ApiResponse<>(products);
+    }
+
+    @GET
+    @Path("/sku/{sku}")
+    public ApiResponse<ProductResponseDTO> findBySku(@PathParam("sku") String sku) {
+        Product product = service.findBySku(sku);
+        return new ApiResponse<>(ProductMapper.toResponse(product));
     }
 }

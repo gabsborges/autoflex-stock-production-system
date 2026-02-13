@@ -1,11 +1,10 @@
 package com.autoflex.entity;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 
 @Entity
-public class Product extends PanacheEntity {
+public class Product extends BaseEntity {
 
     @Column(nullable = false)
     public String name;
