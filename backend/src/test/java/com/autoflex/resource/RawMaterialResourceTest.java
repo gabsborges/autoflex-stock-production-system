@@ -1,5 +1,6 @@
 package com.autoflex.resource;
 
+import com.autoflex.entity.ProductRawMaterial;
 import com.autoflex.entity.RawMaterial;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -13,9 +14,12 @@ import static org.hamcrest.Matchers.*;
 @QuarkusTest
 class RawMaterialResourceTest {
 
+    
+
     @BeforeEach
     @Transactional
     void cleanDatabase() {
+        ProductRawMaterial.deleteAll();
         RawMaterial.deleteAll();
     }
 

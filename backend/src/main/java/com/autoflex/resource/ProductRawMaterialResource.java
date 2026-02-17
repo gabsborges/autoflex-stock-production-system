@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/products/{productId}/raw-materials")
 @Produces(MediaType.APPLICATION_JSON)
@@ -22,7 +23,8 @@ public class ProductRawMaterialResource {
     @POST
     public ApiResponse<ProductRawMaterialResponseDTO> linkRawMaterial(
             @PathParam("productId") Long productId,
-            @Valid ProductRawMaterialRequestDTO request) {
+            @Valid ProductRawMaterialRequestDTO request
+    ) {
         ProductRawMaterialResponseDTO response = service.create(productId, request);
         return new ApiResponse<>(response);
     }
@@ -38,20 +40,19 @@ public class ProductRawMaterialResource {
     public ApiResponse<ProductRawMaterialResponseDTO> update(
             @PathParam("productId") Long productId,
             @PathParam("id") Long id,
-            @Valid ProductRawMaterialRequestDTO request) {
-
-        ProductRawMaterialResponseDTO response = service.update(productId, id, request);
-
-        return new ApiResponse<>(response);
+            @Valid ProductRawMaterialRequestDTO request
+    ) {
+        ProductRawMaterialResponseDTO updated = service.updateQuantity(productId, id, request.quantityRequired);
+        return new ApiResponse<>(updated);
     }
 
     @DELETE
     @Path("/{id}")
-    public void delete(
+    public Response delete(
             @PathParam("productId") Long productId,
-            @PathParam("id") Long id) {
-
+            @PathParam("id") Long id
+    ) {
         service.delete(productId, id);
+        return Response.ok().build(); // 200 OK para o teste
     }
-
 }
