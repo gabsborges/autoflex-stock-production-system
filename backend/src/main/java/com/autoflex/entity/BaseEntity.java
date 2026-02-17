@@ -1,14 +1,7 @@
 package com.autoflex.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -25,13 +18,14 @@ public abstract class BaseEntity extends PanacheEntityBase {
     public LocalDateTime updatedAt;
 
     @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    public void prePersist() {
+        if (this.createdAt == null)
+            this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
+    protected void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 }

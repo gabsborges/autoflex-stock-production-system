@@ -1,8 +1,9 @@
 package com.autoflex.dto;
 
-import com.autoflex.entity.MovementType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.time.LocalDateTime;
+import com.autoflex.entity.StockMovement.MovementType;
 
 public class StockMovementRequestDTO {
 
@@ -10,11 +11,11 @@ public class StockMovementRequestDTO {
     public Long productId;
 
     @NotNull
-    public MovementType type;
-
-    @NotNull
-    @Positive
+    @PositiveOrZero
     public Integer quantity;
 
-    public String description;
+    @NotNull
+    public MovementType type;
+
+    public LocalDateTime movementDate;
 }

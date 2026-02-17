@@ -1,20 +1,47 @@
 package com.autoflex.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import java.time.LocalDateTime;
 
 @Entity
-public class Product extends BaseEntity {
+@Table(name = "product")
+public class Product extends PanacheEntity {
 
+    @NotNull
     @Column(nullable = false)
     public String name;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(nullable = false, unique = true)
     public String sku;
 
+    @NotNull
+    @Positive
     @Column(nullable = false)
     public Integer quantity;
 
+    @NotNull
+    @Positive
     @Column(nullable = false)
     public Double price;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    public LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    public LocalDateTime updatedAt;
+
+    @PrePersist
+    void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

@@ -1,67 +1,57 @@
 package com.autoflex.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.autoflex.dto.StockMovementRequestDTO;
 import com.autoflex.dto.StockMovementResponseDTO;
-import com.autoflex.entity.*;
+import com.autoflex.entity.Product;
+import com.autoflex.entity.StockMovement;
 import com.autoflex.mapper.StockMovementMapper;
-import com.autoflex.repository.ProductRepository;
-import com.autoflex.repository.StockMovementRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StockMovementService {
 
-    @Inject
-    ProductRepository productRepository;
-
-    @Inject
-    StockMovementRepository movementRepository;
-
     @Transactional
-    public void registerMovement(StockMovementRequestDTO dto) {
+    public StockMovementResponseDTO create(StockMovementRequestDTO dto) {
+        Product product = Product.findById(dto.productId);
+        if (product == null) throw new NotFoundException("Product not found");
 
-        Product product = productRepository.findById(dto.productId);
+        StockMovement sm = new StockMovement();
+        sm.product = product;
+        sm.quantity = dto.quantity;
+        sm.type = dto.type;
+        sm.movementDate = dto.movementDate != null ? dto.movementDate : java.time.LocalDateTime.now();
+        sm.persist();
 
-        if (product == null) {
-            throw new BadRequestException("Product not found");
-        }
-
-        if (dto.type == MovementType.OUT && product.quantity < dto.quantity) {
-            throw new BadRequestException("Insufficient stock");
-        }
-
-        if (dto.type == MovementType.IN) {
-            product.quantity += dto.quantity;
-        } else {
-            product.quantity -= dto.quantity;
-        }
-
-        StockMovement movement = new StockMovement();
-        movement.product = product;
-        movement.type = dto.type;
-        movement.quantity = dto.quantity;
-        movement.description = dto.description;
-
-        movementRepository.persist(movement);
+        return StockMovementMapper.toResponse(sm);
     }
 
     public List<StockMovementResponseDTO> listByProduct(Long productId) {
+        Product product = Product.findById(productId);
+        if (product == null) throw new NotFoundException("Product not found");
 
-    Product product = productRepository.findById(productId);
-
-    if (product == null) {
-        throw new BadRequestException("Product not found");
+        return StockMovement.find("product", product)
+                .list()
+                .stream()
+                .map(sm -> StockMovementMapper.toResponse((StockMovement) sm))
+                .collect(Collectors.toList());
     }
 
-    return movementRepository.findByProductId(productId)
-            .stream()
-            .map(StockMovementMapper::toResponse)
-            .collect(Collectors.toList());
-}
+    public int getCurrentStock(Long productId) {
+        Product product = Product.findById(productId);
+        if (product == null) throw new NotFoundException("Product not found");
+
+        List<StockMovement> movements = StockMovement.find("product", product).list();
+
+        int stock = 0;
+        for (StockMovement sm : movements) {
+            if (sm.type == StockMovement.MovementType.IN) stock += sm.quantity;
+            else stock -= sm.quantity;
+        }
+        return stock;
+    }
 }
