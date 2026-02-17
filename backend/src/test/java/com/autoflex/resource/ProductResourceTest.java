@@ -146,6 +146,7 @@ class ProductResourceTest {
 void shouldReturn400WhenUpdatingWithDuplicateSku() {
 
     // Criar primeiro produto
+    @SuppressWarnings("unused")
     String id1 =
         given()
             .contentType(ContentType.JSON)

@@ -22,15 +22,36 @@ public class ProductRawMaterialResource {
     @POST
     public ApiResponse<ProductRawMaterialResponseDTO> linkRawMaterial(
             @PathParam("productId") Long productId,
-            @Valid ProductRawMaterialRequestDTO request
-    ) {
+            @Valid ProductRawMaterialRequestDTO request) {
         ProductRawMaterialResponseDTO response = service.create(productId, request);
         return new ApiResponse<>(response);
     }
-    
+
     @GET
-public ApiResponse<List<ProductRawMaterialResponseDTO>> listByProduct(@PathParam("productId") Long productId) {
-    List<ProductRawMaterialResponseDTO> list = service.listByProduct(productId);
-    return new ApiResponse<>(list);
-}
+    public ApiResponse<List<ProductRawMaterialResponseDTO>> listByProduct(@PathParam("productId") Long productId) {
+        List<ProductRawMaterialResponseDTO> list = service.listByProduct(productId);
+        return new ApiResponse<>(list);
+    }
+
+    @PUT
+    @Path("/{id}")
+    public ApiResponse<ProductRawMaterialResponseDTO> update(
+            @PathParam("productId") Long productId,
+            @PathParam("id") Long id,
+            @Valid ProductRawMaterialRequestDTO request) {
+
+        ProductRawMaterialResponseDTO response = service.update(productId, id, request);
+
+        return new ApiResponse<>(response);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public void delete(
+            @PathParam("productId") Long productId,
+            @PathParam("id") Long id) {
+
+        service.delete(productId, id);
+    }
+
 }
