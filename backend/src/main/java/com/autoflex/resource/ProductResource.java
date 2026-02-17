@@ -1,6 +1,7 @@
 package com.autoflex.resource;
 
 import com.autoflex.dto.ApiResponse;
+import com.autoflex.dto.ProductProducibleDTO;
 import com.autoflex.dto.ProductRequestDTO;
 import com.autoflex.dto.ProductResponseDTO;
 import com.autoflex.service.ProductService;
@@ -63,6 +64,12 @@ public class ProductResource {
     public ApiResponse<ProductResponseDTO> findById(@PathParam("id") Long id) {
         ProductResponseDTO product = service.findById(id);
         return new ApiResponse<>(product);
+    }
+
+    @GET
+    @Path("/production-suggestions")
+    public List<ProductProducibleDTO> getProductionSuggestions() {
+        return service.listProducibleProducts();
     }
 
     @PUT

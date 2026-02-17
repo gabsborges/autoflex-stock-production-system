@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -44,4 +45,12 @@ public class Product extends PanacheEntity {
     void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @OneToMany(
+    mappedBy = "product",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true,
+    fetch = FetchType.LAZY
+)
+    public List<ProductRawMaterial> rawMaterials;
 }

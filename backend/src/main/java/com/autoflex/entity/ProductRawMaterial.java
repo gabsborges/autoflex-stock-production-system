@@ -11,12 +11,12 @@ import jakarta.validation.constraints.Positive;
 public class ProductRawMaterial extends PanacheEntity {
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     public Product product;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "raw_material_id", nullable = false)
     public RawMaterial rawMaterial;
 

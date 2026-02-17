@@ -18,10 +18,10 @@ class ProductRawMaterialResourceTest {
     @BeforeEach
     @Transactional
     void cleanDatabase() {
-        // Limpar na ordem correta para evitar constraint violation
+
         ProductRawMaterial.deleteAll();
-        RawMaterial.deleteAll();
         Product.deleteAll();
+        RawMaterial.deleteAll();
     }
 
     // =====================================
@@ -198,10 +198,10 @@ class ProductRawMaterialResourceTest {
                             }
                         """.formatted(rmId))
                 .when()
-                .post("/products/" + productId + "/raw-materials") // caso seu endpoint suporte update via POST ou criar
-                                                                   // um PUT se quiser
+                .post("/products/" + productId + "/raw-materials") 
+
                 .then()
-                .statusCode(400); // se você implementar PUT, aqui pode ser 200
+                .statusCode(400);
     }
 
     // =====================================

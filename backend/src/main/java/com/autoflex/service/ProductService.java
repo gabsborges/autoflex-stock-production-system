@@ -1,19 +1,31 @@
 package com.autoflex.service;
 
+import com.autoflex.dto.ProductProducibleDTO;
+import com.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.dto.ProductRequestDTO;
 import com.autoflex.dto.ProductResponseDTO;
+import com.autoflex.dto.RawMaterialResponseDTO;
 import com.autoflex.entity.Product;
+import com.autoflex.entity.ProductRawMaterial;
 import com.autoflex.mapper.ProductMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ProductService {
+
+    @Inject
+    ProductRawMaterialService productRawMaterialService;
+
+    @Inject
+    RawMaterialService rawMaterialService;
 
     @Transactional
     public ProductResponseDTO create(ProductRequestDTO dto) {
@@ -106,5 +118,54 @@ public class ProductService {
             throw new NotFoundException("Product not found");
         }
         product.delete();
+    }
+
+    public List<ProductProducibleDTO> listProducibleProducts() {
+
+        List<Product> products = findAllWithRawMaterials();
+        List<ProductProducibleDTO> result = new ArrayList<>();
+
+        for (Product product : products) {
+
+            if (product.rawMaterials == null || product.rawMaterials.isEmpty()) {
+                continue;
+            }
+
+            int maxProducible = Integer.MAX_VALUE;
+
+            for (ProductRawMaterial prm : product.rawMaterials) {
+
+                if (prm.rawMaterial == null) {
+                    maxProducible = 0;
+                    break;
+                }
+
+                int availableStock = prm.rawMaterial.quantity;
+                int producibleByMaterial = availableStock / prm.quantityRequired;
+
+                maxProducible = Math.min(maxProducible, producibleByMaterial);
+            }
+
+            if (maxProducible > 0) {
+                result.add(new ProductProducibleDTO(
+                        product.id,
+                        product.name,
+                        product.sku,
+                        maxProducible,
+                        product.price));
+            }
+        }
+
+        result.sort((a, b) -> b.totalValue.compareTo(a.totalValue));
+
+        return result;
+    }
+
+    public List<Product> findAllWithRawMaterials() {
+        return Product.find(
+                "select distinct p from Product p " +
+                        "left join fetch p.rawMaterials prm " +
+                        "left join fetch prm.rawMaterial")
+                .list();
     }
 }
