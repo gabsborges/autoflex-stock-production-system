@@ -33,6 +33,7 @@ export default function RawMaterialForm({
       <div>
         <label className="block text-sm font-medium mb-1">Name</label>
         <input
+          data-cy="raw-name"
           type="text"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
@@ -44,6 +45,7 @@ export default function RawMaterialForm({
       <div>
         <label className="block text-sm font-medium mb-1">Quantity</label>
         <input
+          data-cy="raw-quantity"
           type="number"
           min="0"
           value={quantity}
@@ -54,6 +56,7 @@ export default function RawMaterialForm({
       </div>
 
       <button
+      data-cy="submit-raw"
         type="submit"
         disabled={loading}
         className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"

@@ -38,6 +38,7 @@ export default function ProductEdit() {
           <div key={field}>
             <label className="block text-sm font-medium mb-1">{field.toUpperCase()}</label>
             <input
+            data-cy={`product-${field}`}
               type={field==="price" || field==="quantity" ? "number":"text"}
               name={field}
               value={form[field as keyof typeof form]}
@@ -48,7 +49,7 @@ export default function ProductEdit() {
         ))}
 
         <div className="flex gap-4 mt-4">
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+          <button data-cy="update-product" type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             Update Product
           </button>
           <button type="button" className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"

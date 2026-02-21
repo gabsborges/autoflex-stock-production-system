@@ -27,10 +27,8 @@ export default function ProductCreate() {
     <div className="max-w-4xl mx-auto p-4 bg-white rounded shadow space-y-8 md:space-y-0 md:flex md:gap-10">
       <ToastContainer />
 
-      {/* Formulário de produto */}
       <ProductForm form={form} onChange={handleChange} onSubmit={handleSubmit} submitLabel="Create Product" />
 
-      {/* Tabela de materiais adicionados */}
       <section className="md:flex-1">
         <h2 className="font-bold text-lg mb-4">Raw Materials Composition</h2>
         <MaterialsTable materials={materials} onRemove={removeMaterial} />
@@ -43,7 +41,6 @@ export default function ProductCreate() {
         </button>
       </section>
 
-      {/* Modal de seleção de materiais */}
       <MaterialsModal
         isOpen={showMaterialModal}
         onClose={() => setShowMaterialModal(false)}

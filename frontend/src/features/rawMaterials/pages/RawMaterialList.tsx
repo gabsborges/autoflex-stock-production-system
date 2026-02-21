@@ -38,6 +38,7 @@ export default function RawMaterialList() {
       <div className="flex justify-end mb-4">
         <Link
           to="/raw-materials/new"
+          data-cy="create-raw"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
         >
           + Create Raw Material

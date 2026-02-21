@@ -3,13 +3,14 @@ import { useDeleteProductMutation, useGetProductsQuery } from "../productsApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { DeleteProductModal } from "../components/DeleteProductModal";
 
 export default function ProductsList() {
   const { data: products = [], isLoading, isError } = useGetProductsQuery();
   const [deleteProduct] = useDeleteProductMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productIdToDelete, setProductIdToDelete] = useState<string | number | null>(null);
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleDeleteClick = (id: string | number) => {
     setProductIdToDelete(id);
@@ -29,10 +30,10 @@ export default function ProductsList() {
       }
       await deleteProduct(productIdToDelete.toString()).unwrap();
       toast.success("Product deleted successfully!");
-      closeModal(); 
+      closeModal();
     } catch (error) {
       console.error("Failed to delete the product:", error);
-      toast.error("Failed to delete the product."); 
+      toast.error("Failed to delete the product.");
       closeModal();
     }
   };
@@ -43,7 +44,10 @@ export default function ProductsList() {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-end mb-4">
-        <Link to="/products/new" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        <Link
+          data-cy="create-product"
+          to="/products/new"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
           + Create Product
         </Link>
       </div>
@@ -73,6 +77,7 @@ export default function ProductsList() {
               <td className="py-3 px-2 flex justify-center gap-3 text-gray-600">
                 <button
                   aria-label="Edit"
+                  data-cy={`edit-product-${id}`}
                   className="hover:text-blue-600 transition"
                   onClick={() => navigate(`/products/${id}/edit`)}
                 >
@@ -80,8 +85,9 @@ export default function ProductsList() {
                 </button>
                 <button
                   aria-label="Delete"
+                  data-cy={`delete-product-${id}`}
                   className="hover:text-red-600 transition"
-                  onClick={() => handleDeleteClick(id)} 
+                  onClick={() => handleDeleteClick(id)}
                 >
                   <HiOutlineTrash className="w-5 h-5" />
                 </button>
@@ -93,27 +99,12 @@ export default function ProductsList() {
 
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-lg font-semibold mb-4">Delete Product</h2>
-            <p>Are you sure you want to delete this product? This action cannot be undone.</p>
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded"
-                onClick={confirmDelete} 
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  <DeleteProductModal
+    isOpen={isModalOpen}
+    onClose={closeModal}
+    onConfirm={confirmDelete}
+  />
+)}
       <ToastContainer />
     </div>
   );

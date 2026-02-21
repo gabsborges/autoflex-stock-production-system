@@ -8,7 +8,7 @@ export interface RawMaterial {
 
 export const rawMaterialsApi = createApi({
   reducerPath: "rawMaterialsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/" }), // Ajuste o endpoint da API
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/" }), 
   tagTypes: ["RawMaterials"],
   endpoints: (builder) => ({
     // POST - Criar material
@@ -18,7 +18,6 @@ export const rawMaterialsApi = createApi({
         method: "POST",
         body: rawMaterial,
       }),
-      // Invalidates the list when a new material is created
       invalidatesTags: ["RawMaterials"],
     }),
 

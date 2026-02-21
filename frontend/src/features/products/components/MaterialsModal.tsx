@@ -23,7 +23,8 @@ export function MaterialsModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    data-cy="materials-modal">
       <div className="bg-white rounded shadow-lg w-full max-w-2xl p-6 relative">
         <h3 className="font-bold text-lg mb-4">Select Raw Materials</h3>
 

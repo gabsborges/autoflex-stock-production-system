@@ -14,7 +14,7 @@ interface Props {
 
 export default function RawMaterialTable({ rawMaterials, onEdit, onDelete }: Props) {
   return (
-    <table className="w-full table-fixed border-collapse">
+    <table className="w-full table-fixed border-collapse" data-cy="raw-material-table">
       <thead>
         <tr className="border-b border-gray-300 text-left text-sm text-gray-600">
           <th className="w-1/6 py-3 px-2 uppercase">Code</th>
@@ -32,12 +32,13 @@ export default function RawMaterialTable({ rawMaterials, onEdit, onDelete }: Pro
           </tr>
         ) : (
           rawMaterials.map(({ id, name, quantity }) => (
-            <tr key={id} className="border-b border-gray-200 hover:bg-gray-50">
+            <tr key={id} className="border-b border-gray-200 hover:bg-gray-50" data-cy={`raw-row-${id}`}>
               <td className="py-3 px-2 text-gray-700">{id}</td>
               <td className="py-3 px-2">{name}</td>
               <td className="py-3 px-2 text-orange-600 font-semibold">{quantity}</td>
               <td className="py-3 px-2 flex justify-center gap-3 text-gray-600">
                 <button
+                  data-cy={`edit-raw-${id}`}
                   aria-label="Edit"
                   className="hover:text-blue-600 transition"
                   onClick={() => onEdit(id)}
@@ -45,6 +46,7 @@ export default function RawMaterialTable({ rawMaterials, onEdit, onDelete }: Pro
                   <HiOutlinePencil className="w-5 h-5" />
                 </button>
                 <button
+                  data-cy={`delete-raw-${id}`}
                   aria-label="Delete"
                   className="hover:text-red-600 transition"
                   onClick={() => onDelete(id)}
