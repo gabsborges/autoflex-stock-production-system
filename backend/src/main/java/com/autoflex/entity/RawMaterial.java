@@ -2,7 +2,7 @@ package com.autoflex.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "raw_material")
@@ -12,7 +12,7 @@ public class RawMaterial extends BaseEntity {
     public String name;
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     @Column(nullable = false)
     public Integer quantity; 
 }

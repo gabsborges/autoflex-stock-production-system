@@ -18,7 +18,9 @@ public class RawMaterialService {
     @Transactional
     public RawMaterialResponseDTO create(RawMaterialRequestDTO dto) {
 
-        RawMaterial existing = RawMaterial.find("name", dto.name).firstResult();
+        String normalizedName = dto.name.trim();
+
+        RawMaterial existing = RawMaterial.find("name", normalizedName).firstResult();
 
         if (existing != null) {
             throw new BadRequestException("Raw material already exists");

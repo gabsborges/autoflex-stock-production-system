@@ -3,7 +3,8 @@ package com.autoflex.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,12 +21,12 @@ public class Product extends PanacheEntity {
     public String sku;
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     @Column(nullable = false)
     public Integer quantity;
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     @Column(nullable = false)
     public Double price;
 

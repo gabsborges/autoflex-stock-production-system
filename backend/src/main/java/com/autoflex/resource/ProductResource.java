@@ -1,9 +1,9 @@
 package com.autoflex.resource;
 
 import com.autoflex.dto.ApiResponse;
-import com.autoflex.dto.ProductProducibleDTO;
 import com.autoflex.dto.ProductRequestDTO;
 import com.autoflex.dto.ProductResponseDTO;
+import com.autoflex.dto.ProductionPlanResponseDTO;
 import com.autoflex.service.ProductService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -68,7 +68,7 @@ public class ProductResource {
 
     @GET
     @Path("/production-suggestions")
-    public List<ProductProducibleDTO> getProductionSuggestions() {
+    public ProductionPlanResponseDTO getProductionSuggestions() {
         return service.listProducibleProducts();
     }
 
