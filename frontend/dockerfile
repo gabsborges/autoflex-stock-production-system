@@ -1,0 +1,20 @@
+# 1️⃣ Imagem base Node.js oficial (versão 20 Alpine)
+FROM node:20-alpine
+
+# 2️⃣ Diretório de trabalho dentro do container
+WORKDIR /app
+
+# 3️⃣ Copiar arquivos de dependências
+COPY package*.json ./
+
+# 4️⃣ Instalar dependências
+RUN npm install
+
+# 5️⃣ Copiar todo o código
+COPY . .
+
+# 6️⃣ Expor a porta do Vite
+EXPOSE 5173
+
+# 7️⃣ Rodar Vite no modo dev, acessível externamente
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
